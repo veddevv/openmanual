@@ -1,8 +1,9 @@
 import subprocess
 from rich.console import Console
 import re
+import sys
 
-def is_valid_module_name(name):
+def is_valid_module_name(name: str) -> bool:
     """
     Validate the Python module name.
     Args:
@@ -12,7 +13,7 @@ def is_valid_module_name(name):
     """
     return re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*$', name) is not None
 
-def get_pydoc(command):
+def get_pydoc(command: str) -> str:
     """
     Execute pydoc command to get documentation for the specified Python module.
     Args:
@@ -33,30 +34,33 @@ def get_pydoc(command):
     except Exception as e:
         return f"An unexpected error occurred: {str(e)}"
 
-def display_pydoc(command):
+def display_pydoc(command: str) -> None:
     """
     Display the documentation for the specified Python module using rich library.
     Args:
         command (str): The Python module to display documentation for.
     """
+    console = Console()
     doc_page = get_pydoc(command)
     if "Error" in doc_page:
-        print(doc_page)
+        console.print(doc_page, style="bold red")
     else:
-        console = Console()
         console.print(doc_page)
 
 if __name__ == "__main__":
+    console = Console()
     try:
         while True:
             command = input("Enter the Python module to display the documentation for (or 'q' to quit): ").strip()
             if command.lower() == 'q':
-                break
+                sys.exit(0)
             elif command:
                 display_pydoc(command)
             else:
-                print("Please enter a valid Python module name.")
+                console.print("Please enter a valid Python module name.", style="bold yellow")
     except KeyboardInterrupt:
-        print("\nExiting...")
+        console.print("\nExiting...", style="bold yellow")
+        sys.exit(0)
     except Exception as e:
-        print(f"An unexpected error occurred: {str(e)}")
+        console.print(f"An unexpected error occurred: {str(e)}", style="bold red")
+        sys.exit(1)
