@@ -47,12 +47,16 @@ def display_pydoc(command: str) -> None:
     else:
         console.print(doc_page)
 
-if __name__ == "__main__":
+def main():
+    """
+    Main function to handle user input and display documentation.
+    """
     console = Console()
     try:
         while True:
             command = input("Enter the Python module to display the documentation for (or 'q' to quit): ").strip()
             if command.lower() == 'q':
+                console.print("Exiting...", style="bold yellow")
                 sys.exit(0)
             elif command:
                 display_pydoc(command)
@@ -64,3 +68,6 @@ if __name__ == "__main__":
     except Exception as e:
         console.print(f"An unexpected error occurred: {str(e)}", style="bold red")
         sys.exit(1)
+
+if __name__ == "__main__":
+    main()
