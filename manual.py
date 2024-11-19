@@ -6,6 +6,7 @@ import sys
 def is_valid_module_name(name: str) -> bool:
     """
     Validate the Python module name.
+    
     Args:
         name (str): The name of the Python module.
     Returns:
@@ -16,6 +17,7 @@ def is_valid_module_name(name: str) -> bool:
 def get_pydoc(command: str) -> str:
     """
     Execute pydoc command to get documentation for the specified Python module.
+    
     Args:
         command (str): The Python module to get documentation for.
     Returns:
@@ -37,6 +39,7 @@ def get_pydoc(command: str) -> str:
 def display_pydoc(command: str) -> None:
     """
     Display the documentation for the specified Python module using rich library.
+    
     Args:
         command (str): The Python module to display documentation for.
     """
