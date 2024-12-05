@@ -2,6 +2,11 @@ import subprocess
 from rich.console import Console
 import re
 import sys
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def is_valid_module_name(name: str) -> bool:
     """
@@ -50,7 +55,7 @@ def display_pydoc(command: str) -> None:
     else:
         console.print(doc_page)
 
-def main():
+def main() -> None:
     """
     Main function to handle user input and display documentation.
     """
