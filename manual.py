@@ -35,10 +35,13 @@ def get_pydoc(command: str) -> str:
         result = subprocess.run(['python', '-m', 'pydoc', command], capture_output=True, text=True, check=True)
         return result.stdout
     except subprocess.CalledProcessError as e:
+        logger.error(f"Subprocess error: {e}")
         return f"Error: {e.stderr.strip()}"
     except FileNotFoundError:
+        logger.error("Python executable not found.")
         return "Python executable not found."
     except Exception as e:
+        logger.error(f"Unexpected error: {e}")
         return f"An unexpected error occurred: {str(e)}"
 
 def display_pydoc(command: str) -> None:
@@ -55,26 +58,33 @@ def display_pydoc(command: str) -> None:
     else:
         console.print(doc_page)
 
+def handle_user_input() -> None:
+    """
+    Handle user input and display documentation.
+    """
+    console = Console()
+    while True:
+        command = console.input("Enter the Python module to display the documentation for (or 'q' to quit): ").strip()
+        if command.lower() == 'q':
+            console.print("Exiting...", style="bold yellow")
+            sys.exit(0)
+        elif command:
+            display_pydoc(command)
+        else:
+            console.print("Please enter a valid Python module name.", style="bold yellow")
+
 def main() -> None:
     """
     Main function to handle user input and display documentation.
     """
-    console = Console()
     try:
-        while True:
-            command = console.input("Enter the Python module to display the documentation for (or 'q' to quit): ").strip()
-            if command.lower() == 'q':
-                console.print("Exiting...", style="bold yellow")
-                sys.exit(0)
-            elif command:
-                display_pydoc(command)
-            else:
-                console.print("Please enter a valid Python module name.", style="bold yellow")
+        handle_user_input()
     except KeyboardInterrupt:
-        console.print("\nExiting...", style="bold yellow")
+        Console().print("\nExiting...", style="bold yellow")
         sys.exit(0)
     except Exception as e:
-        console.print(f"An unexpected error occurred: {str(e)}", style="bold red")
+        logger.error(f"Unexpected error in main: {e}")
+        Console().print(f"An unexpected error occurred: {str(e)}", style="bold red")
         sys.exit(1)
 
 if __name__ == "__main__":
